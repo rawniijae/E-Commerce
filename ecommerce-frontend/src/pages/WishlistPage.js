@@ -11,7 +11,7 @@ export default function WishlistPage() {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   return (
-    <div className="pt-28 min-h-screen px-margin-mobile md:px-gutter max-w-container-max mx-auto relative">
+    <div className="pt-36 md:pt-28 min-h-screen px-margin-mobile md:px-gutter max-w-container-max mx-auto relative">
       {/* Background glow */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary-container/10 blur-[120px] rounded-full -z-10 pointer-events-none"></div>
 

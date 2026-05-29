@@ -46,7 +46,7 @@ function ProductList() {
   });
 
   return (
-    <main className="pt-20">
+    <main className="pt-32 md:pt-20">
       {/* Hero Section - Only displayed when no search query is active */}
       {!searchQuery && (
         <section className="relative min-h-[70vh] flex items-center overflow-hidden px-margin-mobile md:px-gutter max-w-container-max mx-auto py-12 animate-fade-in">

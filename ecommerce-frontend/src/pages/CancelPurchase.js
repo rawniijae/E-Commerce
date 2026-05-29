@@ -61,7 +61,7 @@ export default function CancelPurchase() {
 
   if (loading) {
     return (
-      <div className="pt-28 min-h-screen flex items-center justify-center px-4">
+      <div className="pt-36 md:pt-28 min-h-screen flex items-center justify-center px-4">
         <div className="glass-card p-10 rounded-3xl max-w-md w-full text-center border border-secondary-fixed/20 shadow-lg">
           <span className="material-symbols-outlined text-[48px] text-secondary-fixed animate-spin mb-4">
             sync
@@ -76,7 +76,7 @@ export default function CancelPurchase() {
 
   if (error) {
     return (
-      <div className="pt-28 min-h-screen flex items-center justify-center px-4">
+      <div className="pt-36 md:pt-28 min-h-screen flex items-center justify-center px-4">
         <div className="glass-card p-10 rounded-3xl max-w-md w-full text-center border border-error/20 shadow-lg">
           <span className="material-symbols-outlined text-[64px] text-error mb-4 bg-error/10 p-4 rounded-full">
             error
@@ -94,7 +94,7 @@ export default function CancelPurchase() {
   }
 
   return (
-    <div className="pt-28 min-h-screen px-margin-mobile md:px-gutter max-w-container-max mx-auto pb-20 relative">
+    <div className="pt-36 md:pt-28 min-h-screen px-margin-mobile md:px-gutter max-w-container-max mx-auto pb-20 relative">
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-secondary-fixed/5 blur-[120px] rounded-full -z-10 pointer-events-none"></div>
 
       <div className="max-w-2xl mx-auto">

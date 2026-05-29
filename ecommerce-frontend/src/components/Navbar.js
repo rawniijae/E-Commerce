@@ -78,16 +78,71 @@ function Navbar({ onLogout }) {
   return (
     <>
       <header className={`fixed top-0 w-full z-[100] transition-all duration-300 border-b border-secondary-fixed/20 shadow-lg shadow-secondary-fixed/5 ${
-        scrolled ? 'bg-surface/80 py-4 backdrop-blur-xl' : 'bg-surface/40 backdrop-blur-xl h-20'
+        scrolled ? 'bg-surface/80 py-2 md:py-4 backdrop-blur-xl' : 'bg-surface/40 backdrop-blur-xl py-3 md:py-0 md:h-20'
       }`}>
-        <div className="flex justify-between items-center w-full px-margin-mobile md:px-gutter max-w-container-max mx-auto h-full gap-4">
-          {/* Brand Logo */}
-          <Link to="/" className="font-display-lg text-headline-md tracking-tighter text-secondary-fixed shadow-[0_0_15px_rgba(0,253,238,0.5)] uppercase no-underline shrink-0">
-            ELECTRONCE
-          </Link>
+        <div className="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-gutter max-w-container-max mx-auto gap-3 md:gap-4 md:h-full">
+          
+          {/* Logo & Mobile Actions Wrapper */}
+          <div className="flex justify-between items-center w-full md:w-auto">
+            {/* Brand Logo */}
+            <Link to="/" className="font-display-lg text-headline-md tracking-tighter text-secondary-fixed shadow-[0_0_15px_rgba(0,253,238,0.5)] uppercase no-underline shrink-0">
+              ELECTRONCE
+            </Link>
+
+            {/* Mobile Actions - only visible on small screens */}
+            <div className="flex md:hidden items-center gap-4">
+              <Link to="/wishlist" className="relative cursor-pointer no-underline text-on-surface-variant animate-fade-in" title="Wishlist">
+                <span className="material-symbols-outlined text-[24px]">favorite</span>
+                {totalWishlistItems > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-error text-white text-[9px] w-4.5 h-4.5 flex items-center justify-center rounded-full font-bold border border-surface shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+                    {totalWishlistItems}
+                  </span>
+                )}
+              </Link>
+
+              <Link to="/cart" className="relative cursor-pointer no-underline text-on-surface-variant animate-fade-in" title="Shopping Cart">
+                <span className="material-symbols-outlined text-[24px]">shopping_cart</span>
+                {totalItems > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-primary-container text-white text-[9px] w-4.5 h-4.5 flex items-center justify-center rounded-full font-bold border border-surface">
+                    {totalItems}
+                  </span>
+                )}
+              </Link>
+              
+              <div className="group relative cursor-pointer">
+                <span className="material-symbols-outlined text-on-surface-variant hover:text-secondary-fixed transition-colors text-[24px]">account_circle</span>
+                <div className="absolute right-0 top-full pt-2 w-36 hidden group-hover:block z-50">
+                  <div className="bg-surface-container rounded-lg shadow-xl border border-outline/20 overflow-hidden py-1">
+                    <button 
+                      onClick={() => setShowSettings(true)}
+                      className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">settings</span>
+                      Settings
+                    </button>
+                    <button 
+                      onClick={() => setShowSupport(true)}
+                      className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">contact_support</span>
+                      Support
+                    </button>
+                    <div className="border-t border-outline/10 my-1"></div>
+                    <button 
+                      onClick={onLogout}
+                      className="w-full text-left px-4 py-2 text-xs text-error hover:bg-error/10 transition-colors flex items-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">logout</span>
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Global Search Bar */}
-          <div className="flex-1 max-w-xs md:max-w-md relative mx-2 sm:mx-4 md:mx-8">
+          <div className="w-full md:flex-1 md:max-w-md relative">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">
               search
             </span>
@@ -96,7 +151,7 @@ function Navbar({ onLogout }) {
               value={searchQuery}
               onChange={handleSearchChange}
               placeholder="Search tech products, brands..."
-              className="w-full pl-10 pr-10 py-2.5 bg-surface-container-highest/60 border border-outline/20 rounded-full text-sm text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-all"
+              className="w-full pl-10 pr-10 py-2 md:py-2.5 bg-surface-container-highest/60 border border-outline/20 rounded-full text-sm text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-all"
             />
             {searchQuery && (
               <button
@@ -109,8 +164,8 @@ function Navbar({ onLogout }) {
             )}
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-6 shrink-0">
+          {/* Desktop Actions - only visible on larger screens */}
+          <div className="hidden md:flex items-center gap-6 shrink-0">
             <Link to="/wishlist" className="relative cursor-pointer group no-underline text-on-surface-variant" title="Wishlist">
               <span className="material-symbols-outlined group-hover:text-secondary-fixed transition-colors">favorite</span>
               {totalWishlistItems > 0 && (
@@ -158,8 +213,6 @@ function Navbar({ onLogout }) {
                 </div>
               </div>
             </div>
-            
-            <button className="md:hidden material-symbols-outlined text-on-surface-variant">menu</button>
           </div>
         </div>
       </header>
