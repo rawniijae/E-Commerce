@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import ProductDetailsModal from './ProductDetailsModal';
+import { API_BASE_URL } from '../config';
 
 function ProductList() {
   const [products, setProducts] = useState([]);
@@ -21,7 +22,7 @@ function ProductList() {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    fetch('http://localhost:8080/api/products', { headers })
+    fetch(`${API_BASE_URL}/api/products`, { headers })
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);

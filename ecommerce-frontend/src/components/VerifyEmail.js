@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
@@ -47,7 +48,7 @@ export default function VerifyEmail() {
     setIsSuccess(false);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/auth/verify-email?email=${encodeURIComponent(verifyEmail)}&otp=${encodeURIComponent(verifyOtp)}`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/verify-email?email=${encodeURIComponent(verifyEmail)}&otp=${encodeURIComponent(verifyOtp)}`, {
         method: 'POST',
       });
       
@@ -82,7 +83,7 @@ export default function VerifyEmail() {
     setMessage('');
 
     try {
-      const response = await fetch(`http://localhost:8080/api/auth/resend-otp?email=${encodeURIComponent(email)}`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/resend-otp?email=${encodeURIComponent(email)}`, {
         method: 'POST',
       });
 

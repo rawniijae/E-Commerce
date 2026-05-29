@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 
 function Navbar({ onLogout }) {
   const { totalItems } = useCart();
@@ -261,7 +262,7 @@ function SupportModal({ onClose }) {
     setIsTransmitting(true);
     
     try {
-      const response = await fetch(`http://localhost:8080/api/auth/support-enquiry?name=${encodeURIComponent(name)}&email=${encodeURIComponent(emailInput)}&subject=${encodeURIComponent(subject)}&message=${encodeURIComponent(messageInput)}`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/support-enquiry?name=${encodeURIComponent(name)}&email=${encodeURIComponent(emailInput)}&subject=${encodeURIComponent(subject)}&message=${encodeURIComponent(messageInput)}`, {
         method: 'POST'
       });
       

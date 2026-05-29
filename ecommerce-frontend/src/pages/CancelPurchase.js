@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 
 export default function CancelPurchase() {
   const [searchParams] = useSearchParams();
@@ -19,7 +20,7 @@ export default function CancelPurchase() {
       return;
     }
 
-    fetch(`http://localhost:8080/api/auth/orders/${orderId}`)
+    fetch(`${API_BASE_URL}/api/auth/orders/${orderId}`)
       .then(res => {
         if (!res.ok) throw new Error('Order not found in sector.');
         return res.json();
@@ -39,7 +40,7 @@ export default function CancelPurchase() {
     if (!orderId) return;
     setCancelling(true);
 
-    fetch(`http://localhost:8080/api/auth/orders/cancel?orderId=${orderId}`, {
+    fetch(`${API_BASE_URL}/api/auth/orders/cancel?orderId=${orderId}`, {
       method: 'POST'
     })
       .then(res => {

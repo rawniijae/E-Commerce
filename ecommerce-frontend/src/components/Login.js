@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 
 const Login = ({ onLogin }) => {
   const location = useLocation();
@@ -40,7 +41,7 @@ const Login = ({ onLogin }) => {
     setError('');
     setSuccessMessage('');
     try {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +100,7 @@ const Login = ({ onLogin }) => {
     setError('');
     setSuccessMessage('');
     try {
-      const response = await fetch(`http://localhost:8080/api/auth/forgot-password?email=${encodeURIComponent(email)}`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password?email=${encodeURIComponent(email)}`, {
         method: 'POST',
       });
       const text = await response.text();
@@ -127,7 +128,7 @@ const Login = ({ onLogin }) => {
     setError('');
     setSuccessMessage('');
     try {
-      const response = await fetch(`http://localhost:8080/api/auth/reset-password?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(resetOtp)}&newPassword=${encodeURIComponent(newPassword)}`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/reset-password?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(resetOtp)}&newPassword=${encodeURIComponent(newPassword)}`, {
         method: 'POST',
       });
       const text = await response.text();

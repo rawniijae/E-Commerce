@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 
 export default function LoginRegister() {
   const [username, setUsername] = useState('');
@@ -31,7 +32,7 @@ export default function LoginRegister() {
     setIsSuccess(false);
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/register', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password }),
@@ -60,7 +61,7 @@ export default function LoginRegister() {
     setIsSuccess(false);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/auth/verify-email?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/verify-email?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`, {
         method: 'POST',
       });
 
@@ -87,7 +88,7 @@ export default function LoginRegister() {
     setIsSuccess(false);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/auth/resend-otp?email=${encodeURIComponent(email)}`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/resend-otp?email=${encodeURIComponent(email)}`, {
         method: 'POST',
       });
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { API_BASE_URL } from '../config';
 
 export default function Checkout() {
   const { cartItems, clearCart, totalPrice } = useCart();
@@ -39,7 +40,7 @@ export default function Checkout() {
       items: orderItems
     };
 
-    fetch('http://localhost:8080/api/auth/orders/place', {
+    fetch(`${API_BASE_URL}/api/auth/orders/place`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
