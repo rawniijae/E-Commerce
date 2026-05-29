@@ -181,6 +181,10 @@ export default function VerifyEmail() {
                 required
               />
             </div>
+
+            <p className="text-xs text-secondary-fixed text-center bg-secondary-fixed/5 border border-secondary-fixed/10 p-2.5 rounded-xl leading-normal">
+              💡 <strong>Tip:</strong> If the email did not arrive, check your <strong>Spam folder</strong>.
+            </p>
             
             <button 
               type="submit" 

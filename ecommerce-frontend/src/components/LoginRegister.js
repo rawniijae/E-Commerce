@@ -135,6 +135,9 @@ export default function LoginRegister() {
             <p className="text-on-surface-variant text-center text-sm font-body-md mb-2">
               Please enter the 6-digit confirmation code sent to <strong className="text-on-surface">{email}</strong>.
             </p>
+            <p className="text-xs text-secondary-fixed text-center bg-secondary-fixed/5 border border-secondary-fixed/10 p-2.5 rounded-xl leading-normal">
+              💡 <strong>Tip:</strong> If the email did not arrive, check your <strong>Spam folder</strong>. (If email dispatch is offline, the verification code is printed in the success banner above).
+            </p>
             
             <div>
               <div className="flex justify-between items-center mb-2">
