@@ -12,8 +12,13 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
+                String allowedOriginsEnv = System.getenv("ALLOWED_ORIGINS");
+                String[] allowedOrigins = (allowedOriginsEnv != null && !allowedOriginsEnv.isEmpty()) 
+                        ? allowedOriginsEnv.split(",") 
+                        : new String[]{"http://localhost:3000"};
+                        
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000")
+                        .allowedOrigins(allowedOrigins)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*");
             }
