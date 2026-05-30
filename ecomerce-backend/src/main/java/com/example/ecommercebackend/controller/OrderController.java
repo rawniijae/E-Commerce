@@ -23,6 +23,9 @@ public class OrderController {
     @Autowired
     private EmailService emailService;
 
+    @Value("${frontend.url:http://localhost:3000}")
+    private String frontendUrl;
+
     @PostMapping("/place")
     public ResponseEntity<?> placeOrder(@RequestBody Order order) {
         try {
@@ -46,7 +49,7 @@ public class OrderController {
             }
             
             String subject = "Order Confirmation - ELECTRONCE Grid";
-            String cancelUrl = "http://localhost:3000/cancel-purchase?orderId=" + savedOrder.getId();
+            String cancelUrl = frontendUrl + "/cancel-purchase?orderId=" + savedOrder.getId();
             
             String body = "Greetings " + order.getFullName() + ",\n\n" +
                     "We have successfully received and queued your order on the ELECTRONCE Grid!\n\n" +

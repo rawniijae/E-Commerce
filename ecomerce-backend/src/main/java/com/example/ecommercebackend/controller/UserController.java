@@ -29,6 +29,9 @@ public class UserController {
     @Autowired
     private EmailService emailService;
 
+    @Value("${frontend.url:http://localhost:3000}")
+    private String frontendUrl;
+
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody User user) {
         // Check if email already exists
@@ -50,7 +53,7 @@ public class UserController {
         // Send email with OTP and Link
         try {
             String subject = "Verify your Electronce Account";
-            String verificationUrl = "http://localhost:3000/verify-email?email=" + user.getEmail() + "&otp=" + otp;
+            String verificationUrl = frontendUrl + "/verify-email?email=" + user.getEmail() + "&otp=" + otp;
             String body = "Welcome to Electronce!\n\n" +
                     "To complete your registration, please use the following One-Time Password (OTP):\n" +
                     "OTP Code: " + otp + "\n\n" +
@@ -112,7 +115,7 @@ public class UserController {
 
         try {
             String subject = "Resend: Verify your Electronce Account";
-            String verificationUrl = "http://localhost:3000/verify-email?email=" + user.getEmail() + "&otp=" + otp;
+            String verificationUrl = frontendUrl + "/verify-email?email=" + user.getEmail() + "&otp=" + otp;
             String body = "Please verify your Electronce account using the new One-Time Password (OTP):\n" +
                     "OTP Code: " + otp + "\n\n" +
                     "Or verify directly by clicking the link below:\n" +
