@@ -12,6 +12,9 @@ export default function LoginRegister() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [otp, setOtp] = useState('');
   const [resendTimer, setResendTimer] = useState(0);
+  
+  // Cold start countdown (Render wake-up)
+  const [coldStartTimer, setColdStartTimer] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -26,11 +29,20 @@ export default function LoginRegister() {
     }
   }, [resendTimer]);
 
+  // Cold start countdown timer
+  useEffect(() => {
+    if (coldStartTimer > 0) {
+      const timer = setTimeout(() => setColdStartTimer(coldStartTimer - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [coldStartTimer]);
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setMessage('');
     setIsSuccess(false);
+    setColdStartTimer(60);
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
@@ -52,6 +64,7 @@ export default function LoginRegister() {
       setMessage('⛔ Communication link offline. Please try again.');
     } finally {
       setIsLoading(false);
+      setColdStartTimer(0);
     }
   };
 
@@ -137,7 +150,7 @@ export default function LoginRegister() {
               Please enter the 6-digit confirmation code sent to <strong className="text-on-surface">{email}</strong>.
             </p>
             <p className="text-xs text-secondary-fixed text-center bg-secondary-fixed/5 border border-secondary-fixed/10 p-2.5 rounded-xl leading-normal">
-              💡 <strong>Tip:</strong> If the email did not arrive, check your <strong>Spam folder</strong>. (If email dispatch is offline, the verification code is printed in the success banner above).
+              💡 <strong>Tip:</strong> If the email did not arrive, check your <strong>Spam / Junk folder</strong>. It may take up to a minute for the email to arrive.
             </p>
             
             <div>
@@ -245,7 +258,12 @@ export default function LoginRegister() {
               disabled={isLoading || !username || !email || !password}
               className="w-full bg-primary-container text-on-primary-fixed font-bold font-label-md py-4 rounded-xl hover:brightness-110 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(0,170,255,0.3)] mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Registering...' : 'Register'}
+              {isLoading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                  {coldStartTimer > 0 ? `Connecting to server... ${coldStartTimer}s` : 'Registering...'}
+                </span>
+              ) : 'Register'}
             </button>
           </form>
         )}

@@ -64,8 +64,8 @@ public class UserController {
             
             emailService.sendSimpleMessage(user.getEmail(), subject, body);
         } catch (Exception e) {
-            System.err.println("Email dispatch failed: " + e.getMessage());
-            return ResponseEntity.ok("✅ Registration successful! (Email dispatch offline: please use verification code: " + otp + ")");
+            System.err.println("Email dispatch failed for " + user.getEmail() + ": " + e.getMessage());
+            // Never expose OTP to the client — user must receive it via email
         }
 
         return ResponseEntity.ok("✅ Registration successful! Verification OTP sent to your email.");
@@ -125,8 +125,8 @@ public class UserController {
             
             emailService.sendSimpleMessage(user.getEmail(), subject, body);
         } catch (Exception e) {
-            System.err.println("Email dispatch failed: " + e.getMessage());
-            return ResponseEntity.ok("✅ Verification OTP generated! (Email dispatch offline: please use code: " + otp + ")");
+            System.err.println("Resend OTP email dispatch failed for " + user.getEmail() + ": " + e.getMessage());
+            // Never expose OTP to the client
         }
 
         return ResponseEntity.ok("✅ Verification OTP resent to your email.");
@@ -177,8 +177,8 @@ public class UserController {
             
             emailService.sendSimpleMessage(user.getEmail(), subject, body);
         } catch (Exception e) {
-            System.err.println("Email dispatch failed: " + e.getMessage());
-            return ResponseEntity.ok("✅ Password reset OTP generated! (Email dispatch offline: please use code: " + otp + ")");
+            System.err.println("Password reset email dispatch failed for " + user.getEmail() + ": " + e.getMessage());
+            // Never expose OTP to the client
         }
 
         return ResponseEntity.ok("✅ Password reset OTP sent to your email.");
@@ -214,7 +214,7 @@ public class UserController {
             @RequestParam String message) {
         
         try {
-            // 1. Send notification email to the administrator (myecommerceweb20@gmail.com)
+            // 1. Send notification email to the administrator (electronce20@gmail.com)
             String adminSubject = "[Support Enquiry] " + subject;
             String adminBody = "New Support Enquiry from Electronce Grid:\n\n" +
                     "Operative Name: " + name + "\n" +

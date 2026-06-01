@@ -21,6 +21,9 @@ const Login = ({ onLogin }) => {
   const [newPassword, setNewPassword] = useState('');
   const [resendTimer, setResendTimer] = useState(0);
 
+  // Cold start countdown (Render wake-up)
+  const [coldStartTimer, setColdStartTimer] = useState(0);
+
   // Load redirect messages from register page (e.g. "verified successfully")
   useEffect(() => {
     if (location.state?.successMessage) {
@@ -37,11 +40,20 @@ const Login = ({ onLogin }) => {
     }
   }, [resendTimer]);
 
+  // Cold start countdown timer
+  useEffect(() => {
+    if (coldStartTimer > 0) {
+      const timer = setTimeout(() => setColdStartTimer(coldStartTimer - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [coldStartTimer]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     setSuccessMessage('');
+    setColdStartTimer(60);
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
@@ -81,6 +93,7 @@ const Login = ({ onLogin }) => {
       setError('⛔ Communication link offline. Please try again.');
     } finally {
       setIsLoading(false);
+      setColdStartTimer(0);
     }
   };
 
@@ -101,6 +114,7 @@ const Login = ({ onLogin }) => {
     setIsLoading(true);
     setError('');
     setSuccessMessage('');
+    setColdStartTimer(60);
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password?email=${encodeURIComponent(email)}`, {
         method: 'POST',
@@ -117,6 +131,7 @@ const Login = ({ onLogin }) => {
       setError('⛔ Communication link offline. Please try again.');
     } finally {
       setIsLoading(false);
+      setColdStartTimer(0);
     }
   };
 
@@ -238,7 +253,12 @@ const Login = ({ onLogin }) => {
               disabled={isLoading || !email || !password}
               className="w-full bg-primary-container text-on-primary-fixed font-bold font-label-md py-4 rounded-xl hover:brightness-110 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(0,170,255,0.3)] mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Authenticating...' : 'Sign In'}
+              {isLoading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                  {coldStartTimer > 0 ? `Connecting to server... ${coldStartTimer}s` : 'Authenticating...'}
+                </span>
+              ) : 'Sign In'}
             </button>
           </form>
         )}
@@ -267,7 +287,12 @@ const Login = ({ onLogin }) => {
               disabled={isLoading || !email}
               className="w-full bg-primary-container text-on-primary-fixed font-bold font-label-md py-4 rounded-xl hover:brightness-110 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(0,170,255,0.3)] mt-4"
             >
-              {isLoading ? 'Sending Request...' : 'Send Reset Code'}
+              {isLoading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                  {coldStartTimer > 0 ? `Waking up server... ${coldStartTimer}s` : 'Sending...'}
+                </span>
+              ) : 'Send Reset Code'}
             </button>
 
             <button
