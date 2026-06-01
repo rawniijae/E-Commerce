@@ -69,7 +69,11 @@ public class OrderController {
                     "--------------------------------------------------\n\n" +
                     "Thank you for choosing ELECTRONCE.";
             
-            emailService.sendSimpleMessage(order.getUserEmail(), subject, body);
+            try {
+                emailService.sendSimpleMessage(order.getUserEmail(), subject, body);
+            } catch (Exception e) {
+                System.err.println("Order confirmation email failed for " + order.getUserEmail() + ": " + e.getMessage());
+            }
             
             return ResponseEntity.ok(savedOrder);
         } catch (Exception e) {
