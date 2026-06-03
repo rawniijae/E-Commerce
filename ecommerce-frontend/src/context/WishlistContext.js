@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
-
+import { API_BASE_URL } from '../config';
 const WishlistContext = createContext();
 
 export function WishlistProvider({ children }) {
@@ -18,24 +18,65 @@ export function WishlistProvider({ children }) {
     }
   });
 
+  const userEmail = localStorage.getItem('userEmail');
+
   useEffect(() => {
-    try {
-      localStorage.setItem(getStorageKey(), JSON.stringify(wishlistItems));
-    } catch (err) {
-      console.error(err);
+    // Fetch wishlist from backend on mount if user is logged in
+    const fetchWishlist = async () => {
+      if (userEmail) {
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/auth/wishlist?email=${encodeURIComponent(userEmail)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.items) {
+              setWishlistItems(data.items);
+              localStorage.setItem(getStorageKey(), JSON.stringify(data.items));
+            }
+          }
+        } catch (err) {
+          console.error('Failed to fetch wishlist from server:', err);
+        }
+      }
+    };
+    fetchWishlist();
+  }, [userEmail]);
+
+  // Sync to backend whenever wishlist changes (debounced by React state)
+  const syncToBackend = async (items) => {
+    if (userEmail) {
+      try {
+        await fetch(`${API_BASE_URL}/api/auth/wishlist/sync`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userEmail, items })
+        });
+      } catch (err) {
+        console.error('Failed to sync wishlist to server:', err);
+      }
     }
-  }, [wishlistItems]);
+  };
 
   const value = useMemo(() => {
     const toggleWishlist = (product) => {
       if (!product?.id) return;
       setWishlistItems(prev => {
         const exists = prev.some(item => item.id === product.id);
+        let newItems;
         if (exists) {
-          return prev.filter(item => item.id !== product.id);
+          newItems = prev.filter(item => item.id !== product.id);
         } else {
-          return [...prev, product];
+          newItems = [...prev, product];
         }
+        
+        // Update local storage immediately
+        try {
+          localStorage.setItem(getStorageKey(), JSON.stringify(newItems));
+        } catch (e) {}
+        
+        // Sync to backend
+        syncToBackend(newItems);
+        
+        return newItems;
       });
     };
 
