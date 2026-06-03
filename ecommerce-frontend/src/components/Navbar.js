@@ -16,6 +16,7 @@ function Navbar({ onLogout }) {
   // Modals state
   const [showSettings, setShowSettings] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   
   // Theme settings (cyan, violet, emerald)
   const [activeTheme, setActiveTheme] = useState(() => {
@@ -80,6 +81,12 @@ function Navbar({ onLogout }) {
       <header className={`fixed top-0 w-full z-[100] transition-all duration-300 border-b border-secondary-fixed/20 shadow-lg shadow-secondary-fixed/5 ${
         scrolled ? 'bg-surface/80 py-2 md:py-4 backdrop-blur-xl' : 'bg-surface/40 backdrop-blur-xl py-3 md:py-0 md:h-20'
       }`}>
+        {showProfileMenu && (
+          <div 
+            className="fixed inset-0 z-40" 
+            onClick={() => setShowProfileMenu(false)}
+          />
+        )}
         <div className="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-gutter max-w-container-max mx-auto gap-3 md:gap-4 md:h-full">
           
           {/* Logo & Mobile Actions Wrapper */}
@@ -109,34 +116,41 @@ function Navbar({ onLogout }) {
                 )}
               </Link>
               
-              <div className="group relative cursor-pointer">
-                <span className="material-symbols-outlined text-on-surface-variant hover:text-secondary-fixed transition-colors text-[24px]">account_circle</span>
-                <div className="absolute right-0 top-full pt-2 w-36 hidden group-hover:block z-50">
-                  <div className="bg-surface-container rounded-lg shadow-xl border border-outline/20 overflow-hidden py-1">
-                    <button 
-                      onClick={() => setShowSettings(true)}
-                      className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
-                    >
-                      <span className="material-symbols-outlined text-[16px]">settings</span>
-                      Settings
-                    </button>
-                    <button 
-                      onClick={() => setShowSupport(true)}
-                      className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
-                    >
-                      <span className="material-symbols-outlined text-[16px]">contact_support</span>
-                      Support
-                    </button>
-                    <div className="border-t border-outline/10 my-1"></div>
-                    <button 
-                      onClick={onLogout}
-                      className="w-full text-left px-4 py-2 text-xs text-error hover:bg-error/10 transition-colors flex items-center gap-2"
-                    >
-                      <span className="material-symbols-outlined text-[16px]">logout</span>
-                      Logout
-                    </button>
+              <div className="relative cursor-pointer z-50">
+                <span 
+                  className="material-symbols-outlined text-on-surface-variant hover:text-secondary-fixed transition-colors text-[24px]"
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                >
+                  account_circle
+                </span>
+                {showProfileMenu && (
+                  <div className="absolute right-0 top-full pt-2 w-36 z-50">
+                    <div className="bg-surface-container rounded-lg shadow-xl border border-outline/20 overflow-hidden py-1">
+                      <button 
+                        onClick={() => { setShowSettings(true); setShowProfileMenu(false); }}
+                        className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">settings</span>
+                        Settings
+                      </button>
+                      <button 
+                        onClick={() => { setShowSupport(true); setShowProfileMenu(false); }}
+                        className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">contact_support</span>
+                        Support
+                      </button>
+                      <div className="border-t border-outline/10 my-1"></div>
+                      <button 
+                        onClick={() => { if(onLogout) onLogout(); setShowProfileMenu(false); }}
+                        className="w-full text-left px-4 py-2 text-xs text-error hover:bg-error/10 transition-colors flex items-center gap-2"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">logout</span>
+                        Logout
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
@@ -184,34 +198,41 @@ function Navbar({ onLogout }) {
               )}
             </Link>
             
-            <div className="group relative cursor-pointer">
-              <span className="material-symbols-outlined text-on-surface-variant hover:text-secondary-fixed transition-colors">account_circle</span>
-              <div className="absolute right-0 top-full pt-2 w-36 hidden group-hover:block z-50">
-                <div className="bg-surface-container rounded-lg shadow-xl border border-outline/20 overflow-hidden py-1">
-                  <button 
-                    onClick={() => setShowSettings(true)}
-                    className="w-full text-left px-4 py-2.5 text-sm text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">settings</span>
-                    Settings
-                  </button>
-                  <button 
-                    onClick={() => setShowSupport(true)}
-                    className="w-full text-left px-4 py-2.5 text-sm text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">contact_support</span>
-                    Support
-                  </button>
-                  <div className="border-t border-outline/10 my-1"></div>
-                  <button 
-                    onClick={onLogout}
-                    className="w-full text-left px-4 py-2.5 text-sm text-error hover:bg-error/10 transition-colors flex items-center gap-2"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">logout</span>
-                    Logout
-                  </button>
+            <div className="relative cursor-pointer z-50">
+              <span 
+                className="material-symbols-outlined text-on-surface-variant hover:text-secondary-fixed transition-colors"
+                onClick={() => setShowProfileMenu(!showProfileMenu)}
+              >
+                account_circle
+              </span>
+              {showProfileMenu && (
+                <div className="absolute right-0 top-full pt-2 w-36 z-50">
+                  <div className="bg-surface-container rounded-lg shadow-xl border border-outline/20 overflow-hidden py-1">
+                    <button 
+                      onClick={() => { setShowSettings(true); setShowProfileMenu(false); }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">settings</span>
+                      Settings
+                    </button>
+                    <button 
+                      onClick={() => { setShowSupport(true); setShowProfileMenu(false); }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">contact_support</span>
+                      Support
+                    </button>
+                    <div className="border-t border-outline/10 my-1"></div>
+                    <button 
+                      onClick={() => { if(onLogout) onLogout(); setShowProfileMenu(false); }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-error hover:bg-error/10 transition-colors flex items-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">logout</span>
+                      Logout
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
