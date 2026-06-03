@@ -3,9 +3,15 @@ import React, { createContext, useState, useContext, useEffect, useMemo } from '
 const WishlistContext = createContext();
 
 export function WishlistProvider({ children }) {
+  // Generate a unique storage key based on the logged-in user's email
+  const getStorageKey = () => {
+    const email = localStorage.getItem('userEmail');
+    return email ? `wishlistItems_${email}` : 'wishlistItems_guest';
+  };
+
   const [wishlistItems, setWishlistItems] = useState(() => {
     try {
-      const saved = localStorage.getItem('wishlistItems');
+      const saved = localStorage.getItem(getStorageKey());
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -14,7 +20,7 @@ export function WishlistProvider({ children }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
+      localStorage.setItem(getStorageKey(), JSON.stringify(wishlistItems));
     } catch (err) {
       console.error(err);
     }

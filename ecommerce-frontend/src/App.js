@@ -52,8 +52,8 @@ function App() {
       <div className="grain-overlay"></div>
       <CustomCursor />
       <Router>
-        <WishlistProvider>
-          <CartProvider>
+        <WishlistProvider key={isLoggedIn ? localStorage.getItem('userEmail') : 'guest'}>
+          <CartProvider key={isLoggedIn ? localStorage.getItem('userEmail') : 'guest'}>
             <div className="app min-h-screen">
               {isLoggedIn && <Navbar onLogout={handleLogout} />}
             
