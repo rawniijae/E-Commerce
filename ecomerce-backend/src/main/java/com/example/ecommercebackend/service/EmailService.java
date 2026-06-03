@@ -17,19 +17,19 @@ public class EmailService {
     @Autowired(required = false)
     private JavaMailSender mailSender;
 
-    @Value("${resend.api.key:}")
-    private String resendApiKey;
+    @Value("${brevo.api.key:}")
+    private String brevoApiKey;
 
     @Value("${email.from:onboarding@resend.dev}")
     private String senderEmail;
 
     /**
-     * Sends an email using Resend HTTP API if a key is configured,
+     * Sends an email using Brevo HTTP API if a key is configured,
      * otherwise falls back to SMTP (JavaMailSender).
      */
     public void sendSimpleMessage(String to, String subject, String body) {
-        if (resendApiKey != null && !resendApiKey.isEmpty()) {
-            sendViaResend(to, subject, body);
+        if (brevoApiKey != null && !brevoApiKey.isEmpty()) {
+            sendViaBrevo(to, subject, body);
         } else {
             sendViaSmtp(to, subject, body);
         }
@@ -85,16 +85,17 @@ public class EmailService {
     }
 
     /**
-     * Send email via Resend REST API over HTTPS.
+     * Send email via Brevo REST API over HTTPS.
      * This works on Render free tier because it uses port 443, not SMTP ports.
      */
-    private void sendViaResend(String to, String subject, String body) {
+    private void sendViaBrevo(String to, String subject, String body) {
         try {
-            URL url = new URL("https://api.resend.com/emails");
+            URL url = new URL("https://api.brevo.com/v3/smtp/email");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Authorization", "Bearer " + resendApiKey);
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("api-key", brevoApiKey);
             conn.setDoOutput(true);
 
             String htmlContent = buildBrandedHtml(body);
@@ -112,10 +113,10 @@ public class EmailService {
                     .replace("\"", "\\\"");
 
             String jsonPayload = "{"
-                    + "\"from\":\"Electronce <" + senderEmail + ">\","
-                    + "\"to\":[\"" + to + "\"],"
+                    + "\"sender\":{\"name\":\"Electronce\",\"email\":\"" + senderEmail + "\"},"
+                    + "\"to\":[{\"email\":\"" + to + "\"}],"
                     + "\"subject\":\"" + escapedSubject + "\","
-                    + "\"html\":\"" + escapedHtml + "\""
+                    + "\"htmlContent\":\"" + escapedHtml + "\""
                     + "}";
 
             try (OutputStream os = conn.getOutputStream()) {
@@ -125,14 +126,14 @@ public class EmailService {
             int responseCode = conn.getResponseCode();
             if (responseCode < 200 || responseCode >= 300) {
                 String errorBody = new String(conn.getErrorStream().readAllBytes(), StandardCharsets.UTF_8);
-                throw new RuntimeException("Resend API error (HTTP " + responseCode + "): " + errorBody);
+                throw new RuntimeException("Brevo API error (HTTP " + responseCode + "): " + errorBody);
             }
 
-            System.out.println("✅ Email sent via Resend API to: " + to);
+            System.out.println("✅ Email sent via Brevo API to: " + to);
 
         } catch (Exception e) {
-            System.err.println("❌ Resend API email dispatch failed: " + e.getMessage());
-            throw new RuntimeException("Resend email dispatch failed: " + e.getMessage(), e);
+            System.err.println("❌ Brevo API email dispatch failed: " + e.getMessage());
+            throw new RuntimeException("Brevo email dispatch failed: " + e.getMessage(), e);
         }
     }
 
@@ -141,7 +142,7 @@ public class EmailService {
      */
     private void sendViaSmtp(String to, String subject, String body) {
         if (mailSender == null) {
-            throw new RuntimeException("No email transport configured. Set resend.api.key or configure SMTP.");
+            throw new RuntimeException("No email transport configured. Set brevo.api.key or configure SMTP.");
         }
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(senderEmail);
