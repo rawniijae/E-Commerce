@@ -134,6 +134,13 @@ function Navbar({ onLogout }) {
                         Settings
                       </button>
                       <button 
+                        onClick={() => { navigate('/orders'); setShowProfileMenu(false); }}
+                        className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">history</span>
+                        Orders
+                      </button>
+                      <button 
                         onClick={() => { setShowSupport(true); setShowProfileMenu(false); }}
                         className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
                       >
@@ -214,6 +221,13 @@ function Navbar({ onLogout }) {
                     >
                       <span className="material-symbols-outlined text-[18px]">settings</span>
                       Settings
+                    </button>
+                    <button 
+                      onClick={() => { navigate('/orders'); setShowProfileMenu(false); }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">history</span>
+                      Orders
                     </button>
                     <button 
                       onClick={() => { setShowSupport(true); setShowProfileMenu(false); }}

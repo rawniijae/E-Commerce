@@ -15,6 +15,7 @@ import Footer from './components/Footer';
 import CancelPurchase from './pages/CancelPurchase';
 import { WishlistProvider } from './context/WishlistContext';
 import WishlistPage from './pages/WishlistPage';
+import OrdersPage from './pages/OrdersPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -101,6 +102,13 @@ function App() {
               path="/order-confirmation"
               element={
                 isLoggedIn ? <OrderConfirmation /> : <Navigate to="/login" replace />
+              }
+            />
+
+            <Route
+              path="/orders"
+              element={
+                isLoggedIn ? <OrdersPage /> : <Navigate to="/login" replace />
               }
             />
 
