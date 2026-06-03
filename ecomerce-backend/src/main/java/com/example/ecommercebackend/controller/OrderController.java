@@ -91,6 +91,19 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("⛔ Order not found in sector.");
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<?> getUserOrders(@RequestParam String email) {
+        try {
+            java.util.List<Order> orders = orderRepository.findByUserEmail(email);
+            // Sort orders by date descending (newest first)
+            orders.sort((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate()));
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("⛔ Failed to retrieve orders: " + e.getMessage());
+        }
+    }
+
     @PostMapping("/cancel")
     public ResponseEntity<String> cancelOrder(@RequestParam String orderId) {
         Optional<Order> opt = orderRepository.findById(orderId);
