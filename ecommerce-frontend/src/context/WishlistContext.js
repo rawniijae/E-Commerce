@@ -90,6 +90,7 @@ export function WishlistProvider({ children }) {
       toggleWishlist,
       isInWishlist
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wishlistItems]);
 
   return (
