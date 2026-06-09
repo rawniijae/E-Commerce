@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
-import heroImg from '../assets/hero_tech.png';
 
 const PRODUCT_DETAILS = {
   "Apple iPhone 15 Pro Max": {

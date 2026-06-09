@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useWishlist } from '../context/WishlistContext';
 import { useCart } from '../context/CartContext';
 import ProductDetailsModal from '../components/ProductDetailsModal';
-import heroImg from '../assets/hero_tech.png';
 
 export default function WishlistPage() {
   const { wishlistItems, toggleWishlist, isInWishlist } = useWishlist();

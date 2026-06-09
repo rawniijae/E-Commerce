@@ -1,6 +1,5 @@
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
-import heroImg from '../assets/hero_tech.png';
 
 export default function CartPage() {
   const { cartItems, totalPrice, removeFromCart } = useCart();
