@@ -69,7 +69,7 @@ function Navbar({ onLogout }) {
             onClick={() => setShowProfileMenu(false)}
           />
         )}
-        <div className="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-gutter max-w-container-max mx-auto gap-3 md:gap-4 md:h-full">
+        <div className="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-8 mx-auto gap-3 md:gap-4 md:h-full">
           
           {/* Logo & Mobile Actions Wrapper */}
           <div className="flex justify-between items-center w-full md:w-auto">

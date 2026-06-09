@@ -1,9 +1,7 @@
 import React, { createContext, useState, useContext, useMemo } from 'react';
 
-// 1. Create context
 const CartContext = createContext();
 
-// 2. Create provider component (must be PascalCase)
 function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
 
@@ -54,7 +52,6 @@ function CartProvider({ children }) {
   );
 }
 
-// 3. Create custom hook
 function useCart() {
   const context = useContext(CartContext);
   if (!context) {
@@ -63,5 +60,4 @@ function useCart() {
   return context;
 }
 
-// 4. Export as named exports
 export { CartProvider, useCart };
