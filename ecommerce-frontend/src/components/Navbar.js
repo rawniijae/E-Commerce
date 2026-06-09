@@ -359,7 +359,7 @@ function SupportModal({ onClose }) {
               <div className="space-y-3 text-on-surface">
                 <p className="flex items-center gap-2 text-sm">
                   <span className="material-symbols-outlined text-primary text-[18px]">mail</span>
-                  support@electronce.com
+                  electronce20@gmail.com
                 </p>
                 <p className="flex items-center gap-2 text-sm">
                   <span className="material-symbols-outlined text-primary text-[18px]">phone_in_talk</span>
