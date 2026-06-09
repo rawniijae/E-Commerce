@@ -76,7 +76,7 @@ export default function VerifyEmail() {
 
   const handleResendOtp = async () => {
     if (!email) {
-      setMessage('⛔ Please enter email sequence to resend verification.');
+      setMessage('⛔ Please enter email address to resend verification.');
       return;
     }
     setIsLoading(true);
@@ -103,67 +103,65 @@ export default function VerifyEmail() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative px-margin-mobile">
+    <div className="min-h-screen flex items-center justify-center relative px-margin-mobile bg-background">
       {/* Background glow effects */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-container/20 blur-[120px] rounded-full -z-10 animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary-fixed/10 blur-[100px] rounded-full -z-10"></div>
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 blur-[100px] rounded-full -z-10 animate-pulse"></div>
       
-      <div className="glass-card w-full max-w-md p-8 sm:p-12 rounded-3xl relative overflow-hidden z-10">
+      <div className="glass-card w-full max-w-md p-8 sm:p-12 rounded-2xl relative z-10 shadow-lg">
         <div className="text-center mb-8">
-          <h1 className="font-display-lg text-4xl tracking-tighter text-secondary-fixed shadow-[0_0_15px_rgba(0,253,238,0.3)] mb-2 uppercase">
+          <h1 className="font-display-lg text-4xl tracking-tighter text-on-surface mb-2 uppercase">
             Electronce
           </h1>
           <p className="text-on-surface-variant font-label-md tracking-widest text-xs uppercase">
-            Comlink Verification
+            Email Verification
           </p>
         </div>
 
         {message && (
-          <div className={`${isSuccess ? 'bg-secondary-fixed/20 border-secondary-fixed/50 text-secondary-fixed' : 'bg-error-container/50 border-error/50 text-error'} border p-3 rounded-lg text-sm mb-6 text-center`}>
+          <div className={`${isSuccess ? 'bg-primary/10 border-primary/20 text-primary' : 'bg-error-container border-error/20 text-error'} border p-3 rounded-lg text-sm mb-6 text-center`}>
             {message}
           </div>
         )}
 
         {isSuccess ? (
           <div className="space-y-6 text-center">
-            <div className="w-16 h-16 rounded-full bg-secondary-fixed/20 border border-secondary-fixed flex items-center justify-center mx-auto my-4 shadow-[0_0_15px_rgba(0,253,238,0.4)] animate-bounce">
-              <span className="material-symbols-outlined text-secondary-fixed text-[36px]">verified_user</span>
+            <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary flex items-center justify-center mx-auto my-4">
+              <span className="material-symbols-outlined text-primary text-[36px]">verified_user</span>
             </div>
             <p className="text-on-surface font-body-md">
-              Identity confirmed. Security clearances active.
+              Identity confirmed. You may now log in.
             </p>
             <button
               onClick={() => navigate('/login')}
-              className="w-full bg-primary-container text-on-primary-fixed font-bold font-label-md py-4 rounded-xl hover:brightness-110 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(0,170,255,0.3)] mt-4"
+              className="w-full bg-primary text-on-primary font-bold font-label-md py-3.5 rounded-full hover:bg-primary-container transition-all uppercase tracking-wider shadow-sm mt-4"
             >
-              Enter Portal
+              Log In
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider" htmlFor="email">Email Sequence</label>
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
-                placeholder="operator@electronce.com"
+                className="minimal-input"
+                placeholder="Email Address"
                 disabled={isLoading}
                 required
               />
             </div>
             
             <div>
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex justify-between items-center mb-1">
                 <label className="block text-on-surface-variant font-label-md text-xs uppercase tracking-wider" htmlFor="otp">Verification Code (OTP)</label>
                 {email && (
                   <button
                     type="button"
                     onClick={handleResendOtp}
                     disabled={isLoading || resendTimer > 0}
-                    className="text-secondary-fixed text-xs font-bold hover:underline disabled:opacity-50"
+                    className="text-primary text-xs font-semibold hover:underline disabled:opacity-50"
                   >
                     {resendTimer > 0 ? `Retry in ${resendTimer}s` : 'Resend Code'}
                   </button>
@@ -175,27 +173,27 @@ export default function VerifyEmail() {
                 maxLength={6}
                 value={otp}
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface tracking-[0.5em] text-center font-display-md text-lg focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
+                className="minimal-input tracking-[0.5em] text-center font-display-md text-lg"
                 placeholder="••••••"
                 disabled={isLoading}
                 required
               />
             </div>
 
-            <p className="text-xs text-secondary-fixed text-center bg-secondary-fixed/5 border border-secondary-fixed/10 p-2.5 rounded-xl leading-normal">
+            <p className="text-xs text-primary text-center bg-primary/5 border border-primary/10 p-2.5 rounded-xl leading-normal">
               💡 <strong>Tip:</strong> If the email did not arrive, check your <strong>Spam folder</strong>.
             </p>
             
             <button 
               type="submit" 
               disabled={isLoading || !email || otp.length < 6}
-              className="w-full bg-primary-container text-on-primary-fixed font-bold font-label-md py-4 rounded-xl hover:brightness-110 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(0,170,255,0.3)] mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-primary text-on-primary font-bold font-label-md py-3.5 rounded-full hover:bg-primary-container transition-all uppercase tracking-wider shadow-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Verifying Identity...' : 'Confirm Authentication'}
+              {isLoading ? 'Verifying Identity...' : 'Confirm'}
             </button>
 
             <p className="text-center mt-6 text-on-surface-variant text-sm">
-              <Link to="/login" className="text-secondary-fixed hover:underline font-bold">Return to Login</Link>
+              <Link to="/login" className="text-primary hover:underline font-bold">Return to Login</Link>
             </p>
           </form>
         )}

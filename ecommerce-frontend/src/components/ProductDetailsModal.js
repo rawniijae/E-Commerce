@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
+import heroImg from '../assets/hero_tech.png';
 
 const PRODUCT_DETAILS = {
   "Apple iPhone 15 Pro Max": {
@@ -233,15 +234,15 @@ export default function ProductDetailsModal({ product, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-fade-in" onClick={onClose}>
+    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-on-surface/20 backdrop-blur-sm animate-fade-in" onClick={onClose}>
       <div 
-        className="glass-card max-w-4xl w-full p-8 rounded-3xl border border-outline/20 relative flex flex-col md:flex-row gap-8 max-h-[90vh] overflow-y-auto animate-scale-in"
+        className="glass-card max-w-4xl w-full p-8 rounded-2xl relative flex flex-col md:flex-row gap-8 max-h-[90vh] overflow-y-auto animate-scale-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 text-on-surface-variant hover:text-secondary-fixed transition-colors"
+          className="absolute top-4 right-4 text-on-surface-variant hover:text-on-surface transition-colors"
         >
           <span className="material-symbols-outlined text-[28px]">close</span>
         </button>
@@ -260,12 +261,11 @@ export default function ProductDetailsModal({ product, onClose }) {
         </button>
 
         {/* Left Column: Image Area */}
-        <div className="md:w-1/2 flex flex-col items-center justify-center bg-surface-container/30 rounded-2xl p-6 border border-outline/10 relative overflow-hidden group">
-          <div className="absolute w-[120%] h-[120%] bg-secondary-fixed/5 blur-[80px] rounded-full -z-10 animate-pulse"></div>
+        <div className="md:w-1/2 flex flex-col items-center justify-center bg-surface border border-outline-variant rounded-xl p-6 relative overflow-hidden group">
           <img 
             src={product.imageUrl} 
             alt={product.name} 
-            className="max-h-[300px] object-contain transition-transform duration-500 group-hover:scale-105 floating-anim drop-shadow-[0_20px_30px_rgba(0,0,0,0.3)]"
+            className="max-h-[300px] object-contain transition-transform duration-500 group-hover:scale-105"
             onError={(e) => { e.target.src = 'https://via.placeholder.com/300?text=No+Image'; }}
           />
         </div>
@@ -273,18 +273,18 @@ export default function ProductDetailsModal({ product, onClose }) {
         {/* Right Column: Details & Tech Specs */}
         <div className="md:w-1/2 flex flex-col justify-between space-y-6">
           <div>
-            <span className="text-secondary-fixed font-label-md text-[11px] uppercase tracking-widest bg-secondary-fixed/10 px-3 py-1 rounded-full border border-secondary-fixed/20">
+            <span className="text-primary font-label-sm uppercase tracking-widest bg-surface border border-outline-variant px-3 py-1 rounded-full shadow-sm">
               {product.category || 'Tech'}
             </span>
-            <h3 className="font-headline-lg text-2xl md:text-3xl text-on-surface mt-4 mb-2 font-headline-md">
+            <h3 className="font-headline-lg text-2xl md:text-3xl text-on-surface mt-4 mb-2 font-semibold">
               {product.name}
             </h3>
-            <span className="text-secondary-fixed font-sans font-bold text-2xl tabular-nums">₹{product.price}</span>
+            <span className="text-on-surface font-sans font-bold text-2xl tabular-nums">₹{product.price}</span>
             
             {/* Stock Level Indicator */}
             <div className="flex items-center gap-2 mt-3 text-sm font-body-md text-on-surface-variant">
-              <span className={`w-2.5 h-2.5 rounded-full ${details.stock > 3 ? 'bg-secondary-fixed' : 'bg-error'} animate-pulse`}></span>
-              <span>{details.stock} units operational in local sector</span>
+              <span className={`w-2.5 h-2.5 rounded-full ${details.stock > 3 ? 'bg-primary' : 'bg-error'}`}></span>
+              <span>{details.stock} items available</span>
             </div>
 
             <p className="font-body-md text-on-surface-variant mt-4 leading-relaxed">
@@ -293,14 +293,14 @@ export default function ProductDetailsModal({ product, onClose }) {
           </div>
 
           {/* Specs Grid */}
-          <div className="border-t border-b border-outline/10 py-4">
-            <h5 className="font-label-lg text-secondary-fixed uppercase tracking-wider mb-3 text-[11px] font-bold">
+          <div className="border-t border-b border-outline-variant py-4">
+            <h5 className="font-label-md text-primary uppercase tracking-wider mb-3 text-[12px] font-semibold">
               Technical Specifications
             </h5>
             <div className="grid grid-cols-1 gap-2.5 max-h-[180px] overflow-y-auto pr-2">
               {Object.entries(details.specs).map(([key, val]) => (
-                <div key={key} className="flex justify-between text-xs font-body-sm py-1 border-b border-outline/5 last:border-0">
-                  <span className="text-on-surface-variant font-bold">{key}</span>
+                <div key={key} className="flex justify-between text-xs font-body-sm py-1 border-b border-outline-variant/30 last:border-0">
+                  <span className="text-on-surface-variant font-medium">{key}</span>
                   <span className="text-on-surface text-right max-w-[70%]">{val}</span>
                 </div>
               ))}
@@ -309,14 +309,14 @@ export default function ProductDetailsModal({ product, onClose }) {
 
           {/* Controls and Add to Cart */}
           <div className="flex flex-wrap items-center gap-4 pt-2">
-            <div className="flex items-center border border-outline/20 rounded-full bg-surface-container/50">
+            <div className="flex items-center border border-outline-variant rounded-full bg-surface">
               <button 
                 onClick={() => setQuantity(q => Math.max(1, q - 1))}
                 className="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"
               >
                 <span className="material-symbols-outlined text-[18px]">remove</span>
               </button>
-              <span className="w-8 text-center text-sm font-label-lg font-bold">{quantity}</span>
+              <span className="w-8 text-center text-sm font-label-md font-bold text-on-surface">{quantity}</span>
               <button 
                 onClick={() => setQuantity(q => Math.min(details.stock, q + 1))}
                 className="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"
@@ -327,7 +327,7 @@ export default function ProductDetailsModal({ product, onClose }) {
 
             <button 
               onClick={handleAddToCart}
-              className="flex-1 min-w-[150px] py-3 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-md uppercase tracking-wider hover:bg-secondary-fixed/80 transition-all duration-300 shadow-md flex items-center justify-center gap-2"
+              className="flex-1 min-w-[150px] py-2.5 rounded-full bg-primary text-on-primary font-label-md uppercase tracking-wider hover:bg-primary-container transition-all duration-300 shadow-sm flex items-center justify-center gap-2"
             >
               <span className="material-symbols-outlined text-[20px]">add_shopping_cart</span>
               Add To Cart

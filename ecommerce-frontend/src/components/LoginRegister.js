@@ -12,9 +12,6 @@ export default function LoginRegister() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [otp, setOtp] = useState('');
   const [resendTimer, setResendTimer] = useState(0);
-  
-  // Cold start countdown (Render wake-up)
-  const [coldStartTimer, setColdStartTimer] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -29,20 +26,11 @@ export default function LoginRegister() {
     }
   }, [resendTimer]);
 
-  // Cold start countdown timer
-  useEffect(() => {
-    if (coldStartTimer > 0) {
-      const timer = setTimeout(() => setColdStartTimer(coldStartTimer - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [coldStartTimer]);
-
   const handleRegister = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setMessage('');
     setIsSuccess(false);
-    setColdStartTimer(60);
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
@@ -64,7 +52,6 @@ export default function LoginRegister() {
       setMessage('⛔ Communication link offline. Please try again.');
     } finally {
       setIsLoading(false);
-      setColdStartTimer(0);
     }
   };
 
@@ -123,14 +110,13 @@ export default function LoginRegister() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative px-margin-mobile">
+    <div className="min-h-screen flex items-center justify-center relative px-margin-mobile bg-background">
       {/* Background glow effects */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-container/20 blur-[120px] rounded-full -z-10 animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary-fixed/10 blur-[100px] rounded-full -z-10"></div>
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 blur-[100px] rounded-full -z-10 animate-pulse"></div>
       
-      <div className="glass-card w-full max-w-md p-8 sm:p-12 rounded-3xl relative overflow-hidden z-10">
+      <div className="glass-card w-full max-w-md p-8 sm:p-12 rounded-2xl relative z-10 shadow-lg">
         <div className="text-center mb-8">
-          <h1 className="font-display-lg text-4xl tracking-tighter text-secondary-fixed shadow-[0_0_15px_rgba(0,253,238,0.3)] mb-2 uppercase">
+          <h1 className="font-display-lg text-4xl tracking-tighter text-on-surface mb-2 uppercase">
             Electronce
           </h1>
           <p className="text-on-surface-variant font-label-md tracking-widest text-xs uppercase">
@@ -139,28 +125,28 @@ export default function LoginRegister() {
         </div>
 
         {message && (
-          <div className={`${isSuccess ? 'bg-secondary-fixed/20 border-secondary-fixed/50 text-secondary-fixed' : 'bg-error-container/50 border-error/50 text-error'} border p-3 rounded-lg text-sm mb-6 text-center`}>
+          <div className={`${isSuccess ? 'bg-primary/10 border-primary/20 text-primary' : 'bg-error-container border-error/20 text-error'} border p-3 rounded-lg text-sm mb-6 text-center`}>
             {message}
           </div>
         )}
 
         {isVerifying ? (
-          <form onSubmit={handleVerifyOtp} className="space-y-5">
+          <form onSubmit={handleVerifyOtp} className="space-y-6">
             <p className="text-on-surface-variant text-center text-sm font-body-md mb-2">
               Please enter the 6-digit confirmation code sent to <strong className="text-on-surface">{email}</strong>.
             </p>
-            <p className="text-xs text-secondary-fixed text-center bg-secondary-fixed/5 border border-secondary-fixed/10 p-2.5 rounded-xl leading-normal">
-              💡 <strong>Tip:</strong> If the email did not arrive, check your <strong>Spam / Junk folder</strong>. It may take up to a minute for the email to arrive.
+            <p className="text-xs text-primary text-center bg-primary/5 border border-primary/10 p-2.5 rounded-xl leading-normal">
+              💡 <strong>Tip:</strong> If the email did not arrive, check your <strong>Spam / Junk folder</strong>.
             </p>
             
             <div>
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex justify-between items-center mb-1">
                 <label className="block text-on-surface-variant font-label-md text-xs uppercase tracking-wider" htmlFor="verify-otp">Security OTP</label>
                 <button
                   type="button"
                   onClick={handleResendOtp}
                   disabled={isLoading || resendTimer > 0}
-                  className="text-secondary-fixed text-xs font-bold hover:underline disabled:opacity-50"
+                  className="text-primary text-xs font-semibold hover:underline disabled:opacity-50"
                 >
                   {resendTimer > 0 ? `Resend in ${resendTimer}s` : 'Resend Code'}
                 </button>
@@ -171,7 +157,7 @@ export default function LoginRegister() {
                 maxLength={6}
                 value={otp}
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface tracking-[0.5em] text-center font-display-md text-lg focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
+                className="minimal-input tracking-[0.5em] text-center font-display-md text-lg"
                 placeholder="••••••"
                 disabled={isLoading}
                 required
@@ -181,9 +167,9 @@ export default function LoginRegister() {
             <button 
               type="submit" 
               disabled={isLoading || otp.length < 6}
-              className="w-full bg-primary-container text-on-primary-fixed font-bold font-label-md py-4 rounded-xl hover:brightness-110 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(0,170,255,0.3)] mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-primary text-on-primary font-bold font-label-md py-3.5 rounded-full hover:bg-primary-container transition-all uppercase tracking-wider shadow-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Verifying...' : 'Authorize Verification'}
+              {isLoading ? 'Verifying...' : 'Authorize'}
             </button>
 
             <button
@@ -192,58 +178,55 @@ export default function LoginRegister() {
                 setIsVerifying(false);
                 setMessage('');
               }}
-              className="w-full bg-surface-container border border-outline/20 text-on-surface font-bold font-label-md py-4 rounded-xl hover:bg-surface-container-highest transition-all uppercase tracking-wider mt-2"
+              className="w-full bg-surface border border-outline-variant text-on-surface font-semibold font-label-md py-3.5 rounded-full hover:bg-surface-container transition-all uppercase tracking-wider mt-2"
             >
               Back
             </button>
           </form>
         ) : (
-          <form onSubmit={handleRegister} className="space-y-5">
+          <form onSubmit={handleRegister} className="space-y-6">
             <div>
-              <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider" htmlFor="username">Username</label>
               <input
                 id="username"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
-                placeholder="username"
+                className="minimal-input"
+                placeholder="Username"
                 disabled={isLoading}
                 required
               />
             </div>
             
             <div>
-              <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider" htmlFor="email">Email</label>
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
-                placeholder="operator@electronce.com"
+                className="minimal-input"
+                placeholder="Email Address"
                 disabled={isLoading}
                 required
               />
             </div>
             
             <div>
-              <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider" htmlFor="password">Password</label>
               <div className="relative">
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-surface-container-highest border border-outline/20 p-3 pr-10 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
-                  placeholder="••••••••"
+                  className="minimal-input pr-10"
+                  placeholder="Password"
                   disabled={isLoading}
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors"
+                  className="absolute right-0 bottom-2 text-on-surface-variant hover:text-on-surface transition-colors"
                   title={showPassword ? "Hide Password" : "Show Password"}
                 >
                   <span className="material-symbols-outlined text-[20px]">
@@ -256,14 +239,9 @@ export default function LoginRegister() {
             <button 
               type="submit" 
               disabled={isLoading || !username || !email || !password}
-              className="w-full bg-primary-container text-on-primary-fixed font-bold font-label-md py-4 rounded-xl hover:brightness-110 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(0,170,255,0.3)] mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-primary text-on-primary font-bold font-label-md py-3.5 rounded-full hover:bg-primary-container transition-all uppercase tracking-wider shadow-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                  {coldStartTimer > 0 ? `Connecting to server... ${coldStartTimer}s` : 'Registering...'}
-                </span>
-              ) : 'Register'}
+              {isLoading ? 'Registering...' : 'Register'}
             </button>
           </form>
         )}
@@ -271,7 +249,7 @@ export default function LoginRegister() {
         {!isVerifying && (
           <p className="text-center mt-8 text-on-surface-variant text-sm">
             Already have an account?{' '}
-            <Link to="/login" className="text-secondary-fixed hover:underline font-bold">
+            <Link to="/login" className="text-primary hover:underline font-bold">
               Sign In
             </Link>
           </p>

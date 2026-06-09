@@ -69,44 +69,43 @@ export default function Checkout() {
   };
 
   return (
-    <div className="pt-36 md:pt-28 min-h-screen px-margin-mobile md:px-gutter max-w-container-max mx-auto relative">
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary-container/10 blur-[120px] rounded-full -z-10 pointer-events-none"></div>
+    <div className="pt-36 md:pt-28 min-h-screen px-margin-mobile md:px-gutter max-w-container-max mx-auto relative bg-background">
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/5 blur-[100px] rounded-full -z-10 pointer-events-none"></div>
 
       <div className="max-w-3xl mx-auto">
-        <h1 className="font-display-lg text-4xl mb-8 text-center">Secure Checkout</h1>
+        <h1 className="font-display-lg text-4xl mb-8 text-center text-on-surface">Secure Checkout</h1>
         
-        <div className="glass-card p-8 sm:p-12 rounded-3xl relative overflow-hidden">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="glass-card p-8 sm:p-12 rounded-2xl relative overflow-hidden shadow-sm">
+          <form onSubmit={handleSubmit} className="space-y-8">
             
-            <div className="border-b border-outline/20 pb-6 mb-6">
-              <h2 className="font-headline-md text-2xl mb-6 text-secondary-fixed">1. Shipping Details</h2>
+            <div className="border-b border-outline-variant pb-8">
+              <h2 className="font-headline-md text-2xl mb-6 text-on-surface font-semibold">1. Shipping Details</h2>
               <div className="space-y-5">
                 <div>
-                  <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider">Full Name</label>
                   <input 
                     type="text" 
                     name="fullName" 
                     value={formData.fullName} 
                     onChange={handleChange} 
                     required
-                    className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
+                    placeholder="Full Name"
+                    className="minimal-input"
                   />
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider">Email</label>
                     <input 
                       type="email" 
                       name="email" 
                       value={formData.email} 
                       onChange={handleChange} 
                       required
-                      className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
+                      placeholder="Email Address"
+                      className="minimal-input"
                     />
                   </div>
                   <div>
-                    <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider">Phone Number</label>
                     <input 
                       type="tel" 
                       name="phone" 
@@ -114,38 +113,37 @@ export default function Checkout() {
                       onChange={handleChange} 
                       required
                       pattern="[0-9]{10}"
-                      placeholder="10 digit number"
-                      className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
+                      placeholder="Phone Number (10 digits)"
+                      className="minimal-input"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider">Address Coordinates</label>
                   <textarea 
                     name="address" 
                     value={formData.address} 
                     onChange={handleChange} 
                     required
                     rows="3"
-                    className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
+                    placeholder="Full Address"
+                    className="minimal-input resize-none"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider">Sector (Area)</label>
                     <input 
                       type="text" 
                       name="area" 
                       value={formData.area} 
                       onChange={handleChange} 
                       required
-                      className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
+                      placeholder="City / Area"
+                      className="minimal-input"
                     />
                   </div>
                   <div>
-                    <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider">Pincode</label>
                     <input 
                       type="text" 
                       name="pincode" 
@@ -153,27 +151,27 @@ export default function Checkout() {
                       onChange={handleChange} 
                       required
                       pattern="\d{6}"
-                      placeholder="6 digit PIN"
-                      className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
+                      placeholder="Pincode (6 digits)"
+                      className="minimal-input"
                     />
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="pb-6">
-              <h2 className="font-headline-md text-2xl mb-6 text-secondary-fixed">2. Transaction Mode</h2>
+            <div className="pb-4">
+              <h2 className="font-headline-md text-2xl mb-6 text-on-surface font-semibold">2. Payment Method</h2>
               <div className="relative">
                 <select 
                   name="paymentMethod" 
                   value={formData.paymentMethod} 
                   onChange={handleChange}
-                  className="w-full bg-surface-container-highest border border-outline/20 p-3 pr-10 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors appearance-none cursor-pointer hover:border-secondary-fixed/50"
+                  className="w-full bg-surface border border-outline-variant p-3.5 pr-10 rounded-lg text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all appearance-none cursor-pointer shadow-sm"
                 >
-                  <option value="credit-card">Credit Card Protocol</option>
-                  <option value="debit-card">Debit Card Protocol</option>
+                  <option value="credit-card">Credit Card</option>
+                  <option value="debit-card">Debit Card</option>
                   <option value="upi">UPI Transfer</option>
-                  <option value="cod">Physical Currency (COD)</option>
+                  <option value="cod">Cash on Delivery</option>
                 </select>
                 <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">
                   expand_more
@@ -181,20 +179,20 @@ export default function Checkout() {
               </div>
             </div>
 
-            <div className="bg-surface-container p-6 rounded-2xl border border-secondary-fixed/20 mb-8 flex justify-between items-center">
-              <span className="font-headline-md text-xl">Total Assessment</span>
-              <span className="font-sans font-bold text-3xl text-secondary-fixed neon-glow-text tabular-nums">₹{totalPrice.toFixed(2)}</span>
+            <div className="bg-surface p-6 rounded-xl border border-outline-variant flex justify-between items-center shadow-sm">
+              <span className="font-headline-md text-xl text-on-surface">Total Order</span>
+              <span className="font-sans font-bold text-3xl text-on-surface tabular-nums">₹{totalPrice.toFixed(2)}</span>
             </div>
 
             <button 
               type="submit"
               disabled={loading}
-              className="w-full bg-primary-container text-on-primary-fixed font-bold font-label-md py-5 rounded-xl hover:brightness-110 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(0,170,255,0.3)] flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full bg-primary text-on-primary font-bold font-label-md py-4 rounded-full hover:bg-primary-container transition-all uppercase tracking-wider shadow-sm flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <span className="material-symbols-outlined">
                 {loading ? 'sync' : 'lock'}
               </span>
-              {loading ? 'Processing Order...' : 'Authorize Payment'}
+              {loading ? 'Processing Order...' : 'Place Order'}
             </button>
           </form>
         </div>

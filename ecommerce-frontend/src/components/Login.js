@@ -15,20 +15,14 @@ const Login = ({ onLogin }) => {
   const [successMessage, setSuccessMessage] = useState('');
 
   // Forgot password flow states
-  // 'login', 'forgot-email', 'forgot-otp'
   const [authMode, setAuthMode] = useState('login'); 
   const [resetOtp, setResetOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [resendTimer, setResendTimer] = useState(0);
 
-  // Cold start countdown (Render wake-up)
-  const [coldStartTimer, setColdStartTimer] = useState(0);
-
-  // Load redirect messages from register page (e.g. "verified successfully")
   useEffect(() => {
     if (location.state?.successMessage) {
       setSuccessMessage(location.state.successMessage);
-      // Clean history state so message disappears on refresh
       window.history.replaceState({}, document.title);
     }
   }, [location]);
@@ -40,20 +34,11 @@ const Login = ({ onLogin }) => {
     }
   }, [resendTimer]);
 
-  // Cold start countdown timer
-  useEffect(() => {
-    if (coldStartTimer > 0) {
-      const timer = setTimeout(() => setColdStartTimer(coldStartTimer - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [coldStartTimer]);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     setSuccessMessage('');
-    setColdStartTimer(60);
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
@@ -74,12 +59,11 @@ const Login = ({ onLogin }) => {
         onLogin();
         navigate('/products');
       } else {
-        // If unverified, provide a link to verify directly
         if (text.includes('not verified') || response.status === 403) {
           setError(
             <span>
               ⛔ {text || 'Account not verified.'}{' '}
-              <Link to={`/verify-email?email=${encodeURIComponent(email)}`} className="text-secondary-fixed underline hover:brightness-110 font-bold ml-1">
+              <Link to={`/verify-email?email=${encodeURIComponent(email)}`} className="text-primary underline hover:brightness-110 font-bold ml-1">
                 Verify Now
               </Link>
             </span>
@@ -93,7 +77,6 @@ const Login = ({ onLogin }) => {
       setError('⛔ Communication link offline. Please try again.');
     } finally {
       setIsLoading(false);
-      setColdStartTimer(0);
     }
   };
 
@@ -114,7 +97,6 @@ const Login = ({ onLogin }) => {
     setIsLoading(true);
     setError('');
     setSuccessMessage('');
-    setColdStartTimer(60);
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password?email=${encodeURIComponent(email)}`, {
         method: 'POST',
@@ -131,7 +113,6 @@ const Login = ({ onLogin }) => {
       setError('⛔ Communication link offline. Please try again.');
     } finally {
       setIsLoading(false);
-      setColdStartTimer(0);
     }
   };
 
@@ -165,14 +146,13 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative px-margin-mobile">
+    <div className="min-h-screen flex items-center justify-center relative px-margin-mobile bg-background">
       {/* Background glow effects */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-container/20 blur-[120px] rounded-full -z-10 animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary-fixed/10 blur-[100px] rounded-full -z-10"></div>
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 blur-[100px] rounded-full -z-10 animate-pulse"></div>
       
-      <div className="glass-card w-full max-w-md p-8 sm:p-12 rounded-3xl relative overflow-hidden z-10">
+      <div className="glass-card w-full max-w-md p-8 sm:p-12 rounded-2xl relative z-10 shadow-lg">
         <div className="text-center mb-8">
-          <h1 className="font-display-lg text-4xl tracking-tighter text-secondary-fixed shadow-[0_0_15px_rgba(0,253,238,0.3)] mb-2 uppercase">
+          <h1 className="font-display-lg text-4xl tracking-tighter text-on-surface mb-2 uppercase">
             Electronce
           </h1>
           <p className="text-on-surface-variant font-label-md tracking-widest text-xs uppercase">
@@ -183,62 +163,47 @@ const Login = ({ onLogin }) => {
         </div>
 
         {error && (
-          <div className="bg-error-container/50 border border-error/50 text-error p-3 rounded-lg text-sm mb-6 text-center">
+          <div className="bg-error-container text-error p-3 rounded-lg text-sm mb-6 text-center border border-error/20">
             {error}
           </div>
         )}
 
         {successMessage && (
-          <div className="bg-secondary-fixed/20 border border-secondary-fixed/50 text-secondary-fixed p-3 rounded-lg text-sm mb-6 text-center">
+          <div className="bg-primary/10 border border-primary/20 text-primary p-3 rounded-lg text-sm mb-6 text-center">
             {successMessage}
           </div>
         )}
 
         {authMode === 'login' && (
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider" htmlFor="email">Email</label>
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
-                placeholder="operator@electronce.com"
+                className="minimal-input"
+                placeholder="Email Address"
                 disabled={isLoading}
                 required
               />
             </div>
             <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="block text-on-surface-variant font-label-md text-xs uppercase tracking-wider" htmlFor="password">Password</label>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAuthMode('forgot-email');
-                    setError('');
-                    setSuccessMessage('');
-                  }}
-                  className="text-secondary-fixed text-xs font-bold hover:underline"
-                >
-                  Forgot Password?
-                </button>
-              </div>
               <div className="relative">
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-surface-container-highest border border-outline/20 p-3 pr-10 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
-                  placeholder="••••••••"
+                  className="minimal-input pr-10"
+                  placeholder="Password"
                   disabled={isLoading}
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors"
+                  className="absolute right-0 bottom-2 text-on-surface-variant hover:text-on-surface transition-colors"
                   title={showPassword ? "Hide Password" : "Show Password"}
                 >
                   <span className="material-symbols-outlined text-[20px]">
@@ -246,37 +211,44 @@ const Login = ({ onLogin }) => {
                   </span>
                 </button>
               </div>
+              <div className="flex justify-end mt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthMode('forgot-email');
+                    setError('');
+                    setSuccessMessage('');
+                  }}
+                  className="text-primary text-xs font-semibold hover:underline"
+                >
+                  Forgot Password?
+                </button>
+              </div>
             </div>
             
             <button 
               type="submit" 
               disabled={isLoading || !email || !password}
-              className="w-full bg-primary-container text-on-primary-fixed font-bold font-label-md py-4 rounded-xl hover:brightness-110 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(0,170,255,0.3)] mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-primary text-on-primary font-bold font-label-md py-3.5 rounded-full hover:bg-primary-container transition-all uppercase tracking-wider shadow-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                  {coldStartTimer > 0 ? `Connecting to server... ${coldStartTimer}s` : 'Authenticating...'}
-                </span>
-              ) : 'Sign In'}
+              {isLoading ? 'Authenticating...' : 'Sign In'}
             </button>
           </form>
         )}
 
         {authMode === 'forgot-email' && (
-          <form onSubmit={handleRequestResetOtp} className="space-y-5">
+          <form onSubmit={handleRequestResetOtp} className="space-y-6">
             <p className="text-on-surface-variant text-sm font-body-md mb-2">
               Enter your email address. We will send you an OTP code to reset your password.
             </p>
             <div>
-              <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider" htmlFor="reset-email">Email</label>
               <input
                 id="reset-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
-                placeholder="operator@electronce.com"
+                className="minimal-input"
+                placeholder="Email Address"
                 disabled={isLoading}
                 required
               />
@@ -285,14 +257,9 @@ const Login = ({ onLogin }) => {
             <button 
               type="submit" 
               disabled={isLoading || !email}
-              className="w-full bg-primary-container text-on-primary-fixed font-bold font-label-md py-4 rounded-xl hover:brightness-110 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(0,170,255,0.3)] mt-4"
+              className="w-full bg-primary text-on-primary font-bold font-label-md py-3.5 rounded-full hover:bg-primary-container transition-all uppercase tracking-wider shadow-sm mt-4 disabled:opacity-50"
             >
-              {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                  {coldStartTimer > 0 ? `Waking up server... ${coldStartTimer}s` : 'Sending...'}
-                </span>
-              ) : 'Send Reset Code'}
+              {isLoading ? 'Sending...' : 'Send Reset Code'}
             </button>
 
             <button
@@ -302,7 +269,7 @@ const Login = ({ onLogin }) => {
                 setError('');
                 setSuccessMessage('');
               }}
-              className="w-full bg-surface-container border border-outline/20 text-on-surface font-bold font-label-md py-4 rounded-xl hover:bg-surface-container-highest transition-all uppercase tracking-wider mt-2"
+              className="w-full bg-surface border border-outline-variant text-on-surface font-semibold font-label-md py-3.5 rounded-full hover:bg-surface-container transition-all uppercase tracking-wider mt-2"
             >
               Return to Login
             </button>
@@ -310,19 +277,19 @@ const Login = ({ onLogin }) => {
         )}
 
         {authMode === 'forgot-otp' && (
-          <form onSubmit={handleResetPassword} className="space-y-5">
+          <form onSubmit={handleResetPassword} className="space-y-6">
             <p className="text-on-surface-variant text-sm font-body-md mb-2">
               An OTP has been sent to <strong>{email}</strong>. Enter the OTP code and your new password below.
             </p>
 
             <div>
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex justify-between items-center mb-1">
                 <label className="block text-on-surface-variant font-label-md text-xs uppercase tracking-wider" htmlFor="reset-otp">OTP Code</label>
                 <button
                   type="button"
                   onClick={handleRequestResetOtp}
                   disabled={isLoading || resendTimer > 0}
-                  className="text-secondary-fixed text-xs font-bold hover:underline disabled:opacity-50"
+                  className="text-primary text-xs font-semibold hover:underline disabled:opacity-50"
                 >
                   {resendTimer > 0 ? `Resend in ${resendTimer}s` : 'Resend Code'}
                 </button>
@@ -333,7 +300,7 @@ const Login = ({ onLogin }) => {
                 maxLength={6}
                 value={resetOtp}
                 onChange={(e) => setResetOtp(e.target.value.replace(/\D/g, ''))}
-                className="w-full bg-surface-container-highest border border-outline/20 p-3 rounded-lg text-on-surface tracking-[0.5em] text-center font-display-md text-lg focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
+                className="minimal-input tracking-[0.5em] text-center font-display-md text-lg"
                 placeholder="••••••"
                 disabled={isLoading}
                 required
@@ -341,22 +308,21 @@ const Login = ({ onLogin }) => {
             </div>
 
             <div>
-              <label className="block text-on-surface-variant font-label-md text-xs mb-2 uppercase tracking-wider" htmlFor="new-password">New Password</label>
               <div className="relative">
                 <input
                   id="new-password"
                   type={showNewPassword ? 'text' : 'password'}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full bg-surface-container-highest border border-outline/20 p-3 pr-10 rounded-lg text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors"
-                  placeholder="••••••••"
+                  className="minimal-input pr-10"
+                  placeholder="New Password"
                   disabled={isLoading}
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors"
+                  className="absolute right-0 bottom-2 text-on-surface-variant hover:text-on-surface transition-colors"
                   title={showNewPassword ? "Hide Password" : "Show Password"}
                 >
                   <span className="material-symbols-outlined text-[20px]">
@@ -369,7 +335,7 @@ const Login = ({ onLogin }) => {
             <button 
               type="submit" 
               disabled={isLoading || resetOtp.length < 6 || !newPassword}
-              className="w-full bg-primary-container text-on-primary-fixed font-bold font-label-md py-4 rounded-xl hover:brightness-110 transition-all uppercase tracking-wider shadow-[0_0_15px_rgba(0,170,255,0.3)] mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-primary text-on-primary font-bold font-label-md py-3.5 rounded-full hover:bg-primary-container transition-all uppercase tracking-wider shadow-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Resetting...' : 'Reset Password'}
             </button>
@@ -381,7 +347,7 @@ const Login = ({ onLogin }) => {
                 setError('');
                 setSuccessMessage('');
               }}
-              className="w-full bg-surface-container border border-outline/20 text-on-surface font-bold font-label-md py-4 rounded-xl hover:bg-surface-container-highest transition-all uppercase tracking-wider mt-2"
+              className="w-full bg-surface border border-outline-variant text-on-surface font-semibold font-label-md py-3.5 rounded-full hover:bg-surface-container transition-all uppercase tracking-wider mt-2"
             >
               Cancel
             </button>
@@ -391,21 +357,21 @@ const Login = ({ onLogin }) => {
         {authMode === 'login' && (
           <>
             <div className="flex items-center my-6">
-              <div className="flex-1 border-t border-outline/20"></div>
+              <div className="flex-1 border-t border-outline-variant"></div>
               <span className="px-4 text-on-surface-variant text-xs font-label-md uppercase">OR</span>
-              <div className="flex-1 border-t border-outline/20"></div>
+              <div className="flex-1 border-t border-outline-variant"></div>
             </div>
 
             <button 
               onClick={handleGuestLogin}
               disabled={isLoading}
-              className="w-full bg-surface-container border border-secondary-fixed/30 text-secondary-fixed font-bold font-label-md py-4 rounded-xl hover:bg-secondary-fixed/10 transition-all uppercase tracking-wider"
+              className="w-full bg-surface border border-primary text-primary font-bold font-label-md py-3.5 rounded-full hover:bg-primary/5 transition-all uppercase tracking-wider shadow-sm"
             >
               Guest Bypass
             </button>
 
             <p className="text-center mt-8 text-on-surface-variant text-sm">
-              Don't have an account? <Link to="/register" className="text-secondary-fixed hover:underline font-bold">Register</Link>
+              Don't have an account? <Link to="/register" className="text-primary hover:underline font-bold">Register</Link>
             </p>
           </>
         )}

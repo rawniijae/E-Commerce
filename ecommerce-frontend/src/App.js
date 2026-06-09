@@ -12,6 +12,7 @@ import LoginRegister from './components/LoginRegister';
 import VerifyEmail from './components/VerifyEmail';
 import CustomCursor from './components/CustomCursor';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 import CancelPurchase from './pages/CancelPurchase';
 import { WishlistProvider } from './context/WishlistContext';
 import WishlistPage from './pages/WishlistPage';
@@ -49,14 +50,16 @@ function App() {
   }, [isLoggedIn]);
 
   return (
-    <div className="dark font-body-md selection:bg-secondary-fixed/30 text-on-surface">
+    <div className="font-body-md selection:bg-primary/30 text-on-surface bg-background min-h-screen">
       <div className="grain-overlay"></div>
       <CustomCursor />
       <Router>
+        <ScrollToTop />
         <WishlistProvider key={isLoggedIn ? localStorage.getItem('userEmail') : 'guest'}>
           <CartProvider key={isLoggedIn ? localStorage.getItem('userEmail') : 'guest'}>
             <div className="app min-h-screen">
               {isLoggedIn && <Navbar onLogout={handleLogout} />}
+              {isLoggedIn && <CartPopup />}
             
             <Routes>
             <Route
@@ -74,10 +77,7 @@ function App() {
               path="/products"
               element={
                 isLoggedIn ? (
-                  <>
-                    <ProductList />
-                    <CartPopup />
-                  </>
+                  <ProductList />
                 ) : (
                   <Navigate to="/login" replace />
                 )
