@@ -41,7 +41,10 @@ function ProductList() {
     fetch(`${API_BASE_URL}/api/products`, { headers })
       .then((res) => res.json())
       .then((data) => {
-        setProducts(data && data.length > 0 ? data : fallbackProducts);
+        const fetchedData = data && data.length > 0 ? data : [];
+        const fetchedNames = new Set(fetchedData.map(p => p.name));
+        const missingProducts = fallbackProducts.filter(p => !fetchedNames.has(p.name));
+        setProducts([...fetchedData, ...missingProducts]);
         setLoading(false);
       })
       .catch((err) => {

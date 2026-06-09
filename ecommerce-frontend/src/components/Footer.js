@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Brand Column */}
         <div className="space-y-4">
-          <Link to="/" className="font-display-lg text-headline-md tracking-tighter text-secondary-fixed shadow-[0_0_15px_rgba(0,253,238,0.3)] uppercase no-underline">
+          <Link to="/" className="font-display-lg text-headline-md tracking-tighter text-on-surface font-bold uppercase no-underline">
             ELECTRONCE
           </Link>
           <p className="text-on-surface-variant font-body-md text-sm mt-2">
