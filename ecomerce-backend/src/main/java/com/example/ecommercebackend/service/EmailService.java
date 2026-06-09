@@ -48,32 +48,32 @@ public class EmailService {
 
         return "<!DOCTYPE html>"
                 + "<html><head><meta charset='UTF-8'></head>"
-                + "<body style='margin:0;padding:0;background-color:#0a0a0f;font-family:Arial,Helvetica,sans-serif;'>"
-                + "<table width='100%' cellpadding='0' cellspacing='0' style='background-color:#0a0a0f;padding:40px 0;'>"
+                + "<body style='margin:0;padding:0;background-color:#0e1a2c;font-family:Arial,Helvetica,sans-serif;'>"
+                + "<table width='100%' cellpadding='0' cellspacing='0' style='background-color:#0e1a2c;padding:40px 0;'>"
                 + "<tr><td align='center'>"
-                + "<table width='600' cellpadding='0' cellspacing='0' style='background-color:#12121a;border-radius:16px;border:1px solid #1e1e2e;overflow:hidden;'>"
+                + "<table width='600' cellpadding='0' cellspacing='0' style='background-color:#1d2d46;border-radius:16px;border:1px solid #334155;overflow:hidden;'>"
 
                 // Header with ELECTRONCE branding
-                + "<tr><td style='background:linear-gradient(135deg,#0a2a4a 0%,#0d1b2a 50%,#0a1628 100%);padding:40px 30px;text-align:center;border-bottom:1px solid #00fdee22;'>"
-                + "<h1 style='margin:0;font-size:36px;font-weight:900;letter-spacing:8px;color:#00fdee;text-shadow:0 0 20px rgba(0,253,238,0.4);font-family:Arial,Helvetica,sans-serif;'>"
+                + "<tr><td style='background:linear-gradient(135deg,#122036 0%,#1a2c49 100%);padding:40px 30px;text-align:center;border-bottom:1px solid #334155;'>"
+                + "<h1 style='margin:0;font-size:36px;font-weight:900;letter-spacing:8px;color:#ffffff;font-family:Arial,Helvetica,sans-serif;'>"
                 + "ELECTRONCE"
                 + "</h1>"
-                + "<p style='margin:8px 0 0;font-size:11px;letter-spacing:4px;color:#00aaff;text-transform:uppercase;'>"
+                + "<p style='margin:8px 0 0;font-size:11px;letter-spacing:4px;color:#60a5fa;text-transform:uppercase;'>"
                 + "Premium Electronics Grid"
                 + "</p>"
                 + "</td></tr>"
 
                 // Body content
-                + "<tr><td style='padding:35px 30px;color:#c8c8d0;font-size:15px;line-height:1.7;'>"
+                + "<tr><td style='padding:35px 30px;color:#cbd5e1;font-size:15px;line-height:1.7;'>"
                 + htmlBody
                 + "</td></tr>"
 
                 // Footer
-                + "<tr><td style='padding:25px 30px;text-align:center;border-top:1px solid #1e1e2e;'>"
-                + "<p style='margin:0;font-size:11px;color:#555568;letter-spacing:1px;'>"
+                + "<tr><td style='padding:25px 30px;text-align:center;border-top:1px solid #334155;'>"
+                + "<p style='margin:0;font-size:11px;color:#cbd5e1;letter-spacing:1px;'>"
                 + "© 2026 Electronce. All rights reserved."
                 + "</p>"
-                + "<p style='margin:6px 0 0;font-size:10px;color:#3a3a4a;'>"
+                + "<p style='margin:6px 0 0;font-size:10px;color:#94a3b8;'>"
                 + "This is an automated transmission from the Electronce Grid."
                 + "</p>"
                 + "</td></tr>"
