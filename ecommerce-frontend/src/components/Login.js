@@ -13,6 +13,7 @@ const Login = ({ onLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [loadingTime, setLoadingTime] = useState(0);
 
   // Forgot password flow states
   const [authMode, setAuthMode] = useState('login'); 
@@ -33,6 +34,19 @@ const Login = ({ onLogin }) => {
       return () => clearTimeout(timer);
     }
   }, [resendTimer]);
+
+  useEffect(() => {
+    let interval;
+    if (isLoading) {
+      setLoadingTime(0);
+      interval = setInterval(() => {
+        setLoadingTime(prev => prev + 1);
+      }, 1000);
+    } else {
+      setLoadingTime(0);
+    }
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -229,10 +243,31 @@ const Login = ({ onLogin }) => {
             <button 
               type="submit" 
               disabled={isLoading || !email || !password}
-              className="w-full bg-primary text-on-primary font-bold font-label-md py-3.5 rounded-full hover:bg-primary-container transition-all uppercase tracking-wider shadow-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-primary text-on-primary font-bold font-label-md py-3.5 rounded-full hover:bg-primary-container transition-all uppercase tracking-wider shadow-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
+              {isLoading && (
+                <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
+              )}
               {isLoading ? 'Authenticating...' : 'Sign In'}
             </button>
+            {isLoading && loadingTime > 2 && (
+              <div className="text-center mt-4 p-4 bg-surface-container rounded-xl border border-primary/20 shadow-inner">
+                <p className="text-sm text-primary animate-pulse font-medium">
+                  {loadingTime < 10 ? 'Connecting to backend, please be patient...' : 'Waking up the server, this can take a minute...'}
+                </p>
+                <div className="mt-3 flex flex-col items-center">
+                  <div className="w-full bg-surface border border-outline-variant rounded-full h-2 mb-2 overflow-hidden">
+                    <div 
+                      className="bg-primary h-full transition-all duration-1000 ease-linear" 
+                      style={{ width: `${Math.min(100, (loadingTime / 60) * 100)}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-xs text-on-surface-variant font-mono bg-surface px-2 py-1 rounded-md border border-outline-variant">
+                    Estimated time remaining: {Math.max(0, 60 - loadingTime)}s
+                  </p>
+                </div>
+              </div>
+            )}
           </form>
         )}
 

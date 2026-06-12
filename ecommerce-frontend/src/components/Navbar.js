@@ -61,7 +61,7 @@ function Navbar({ onLogout }) {
   return (
     <>
       <header className={`fixed top-0 w-full z-[100] transition-all duration-300 border-b border-outline-variant shadow-sm ${
-        scrolled ? 'bg-surface/95 backdrop-blur-xl py-2 md:py-4' : 'bg-surface py-3 md:py-0 md:h-20'
+        scrolled ? 'bg-surface/95 backdrop-blur-xl py-2 md:py-3' : 'bg-surface py-3 md:py-4'
       }`}>
         {showProfileMenu && (
           <div 
@@ -69,14 +69,23 @@ function Navbar({ onLogout }) {
             onClick={() => setShowProfileMenu(false)}
           />
         )}
-        <div className="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-8 mx-auto gap-3 md:gap-4 md:h-full">
+        <div className="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-8 mx-auto gap-3 md:gap-4">
           
           {/* Logo & Mobile Actions Wrapper */}
           <div className="flex justify-between items-center w-full md:w-auto">
-            {/* Brand Logo */}
-            <Link to="/" className="font-display-lg text-headline-md tracking-tighter text-on-surface uppercase no-underline shrink-0 hover:text-primary transition-colors">
-              ELECTRONCE
-            </Link>
+            {/* Brand Logo & Categories */}
+            <div className="flex items-center gap-6">
+              <Link to="/" className="font-display-lg text-headline-md tracking-tighter text-on-surface uppercase no-underline shrink-0 hover:text-primary transition-colors">
+                ELECTRONCE
+              </Link>
+              
+              {/* Desktop Categories */}
+              <div className="hidden lg:flex items-center gap-4">
+                <Link to="/products?search=Phones" className="text-on-surface-variant hover:text-primary font-label-md text-sm transition-colors uppercase tracking-wider">Phones</Link>
+                <Link to="/products?search=Wearables" className="text-on-surface-variant hover:text-primary font-label-md text-sm transition-colors uppercase tracking-wider">Wearables</Link>
+                <Link to="/products?search=Audio" className="text-on-surface-variant hover:text-primary font-label-md text-sm transition-colors uppercase tracking-wider">Audio</Link>
+              </div>
+            </div>
 
             {/* Mobile Actions - only visible on small screens */}
             <div className="flex md:hidden items-center gap-4">
